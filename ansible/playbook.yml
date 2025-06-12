@@ -1,0 +1,51 @@
+---
+- name: Install Python3, Ansible Builder, and Container Engine
+  hosts: localhost
+  
+  vars:
+    container_engine: podman # Change to 'docker' if preferred
+    working_path: "{{ lookup('env', 'PWD') }}"
+    venv_path: "{{ working_path ~ '/.venv' }}"
+
+  tasks:
+    # Should be unnecessary since this is running in Ansible
+    - name: Ensure Python3 is installed
+      package:
+        name:
+          - python3
+        state: present
+
+    - name: Ensure Python virtual environment exists
+      command: python3 -m venv "{{ venv_path }}"
+      args:
+        creates: "{{ venv_path }}/bin/activate"
+
+    - name: Install ansible-builder via pip
+      pip:
+        name: ansible-builder
+        virtualenv: "{{ venv_path }}"
+
+    - name: Install Docker
+      when: container_engine == 'docker'
+      block:
+      - name: Ensure Docker role is present
+        community.general.ansible_galaxy_install:
+          type: role
+          name: git+https://github.com/geerlingguy/ansible-role-docker.git
+          dest: "{{ working_path }}/.ansible/roles"
+    
+      - name: Ensure Docker is installed
+        include_role:
+          role: ansible-role-docker
+
+    - name: Ensure Podman is installed
+      when: container_engine == 'podman'
+      package:
+        name: podman
+        state: present
+    
+    - name: Run Ansible Builder to build the container image
+      command: "{{ venv_path }}/bin/ansible-builder build --container-runtime '{{ container_engine }}'"
+      args:
+        chdir: "{{ working_path }}"
+        creates: "{{ working_path }}/context/Containerfile"

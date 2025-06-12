@@ -1,0 +1,12 @@
+---
+# https://ansible.readthedocs.io/projects/builder/en/latest/definition/
+version: 3
+
+images:
+  base_image:
+    name: quay.io/ansible/awx-ee:24.6.1
+
+dependencies:
+  system: dependencies/bindep.txt
+  python: dependencies/requirements.txt
+  galaxy: dependencies/requirements.yml
