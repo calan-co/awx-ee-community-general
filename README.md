@@ -1,1 +1,1 @@
-# awx-ee-proxmox-automation
+# awx-ee-community-general
