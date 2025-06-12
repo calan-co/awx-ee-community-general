@@ -1,4 +1,4 @@
-# awx-ee-community-general
+# awx-ee-proxmox
 This repo contains a modified AWX Execution Environment (EE) that includes the community.general collection and dependencies for community.general.proxmox. It was created to support the ansible roles and playbook for netbox-proxmox-automation. 
 
 ## Prerequisites
