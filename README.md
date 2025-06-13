@@ -1,5 +1,5 @@
 # awx-ee-community-general
-This repo contains a modified AWX Execution Environment (EE) that includes the community.general collection and dependencies for community.general.proxmox. It was created to support the ansible roles and playbook for netbox-proxmox-automation. 
+This repo contains resources for building a modified AWX Execution Environment (EE) that includes the community.general collection and dependencies for community.general.proxmox. It was created to support the ansible roles and playbook for netbox-proxmox-automation. 
 
 ## Prerequisites
 Building this image requires ansible-builder and it's dependencies (python3.9+ and {docker, podman}).
