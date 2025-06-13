@@ -6,6 +6,8 @@
     container_engine: podman # Change to 'docker' if preferred
     working_path: "{{ lookup('env', 'PWD') }}"
     venv_path: "{{ working_path ~ '/.venv' }}"
+    awx_image_tag: "awx-ee/proxmox:latest"  # Change as needed for your AWX image tag
+    awx_image_platform: "linux/amd64"  # Change as needed for your architecture
 
   tasks:
     # Should be unnecessary since this is running in Ansible
@@ -45,7 +47,7 @@
         state: present
     
     - name: Run Ansible Builder to build the container image
-      command: "{{ venv_path }}/bin/ansible-builder build --container-runtime '{{ container_engine }}'"
+      command: "{{ venv_path }}/bin/ansible-builder build --container-runtime '{{ container_engine }}' --tag '{{ awx_image_tag }}' --extra-build-cli-args='--platform {{awx_image_platform}}'"
       args:
         chdir: "{{ working_path }}"
         creates: "{{ working_path }}/context/Containerfile"
